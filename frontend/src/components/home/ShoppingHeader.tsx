@@ -6,14 +6,14 @@ import { ShoppingHeaderProps } from './types';
 
 const ShoppingHeader = ({ title, setTitle, count, setCount, onAdd }: ShoppingHeaderProps) => {
   return (
-    <Box sx={{ mb: 4 }}>
+    <Box sx={{ mb: 1.5 }}>
       <Typography 
-        variant="h3" 
+        variant="h5" 
         sx={{ 
           fontWeight: 900, 
-          mb: 4, 
+          mb: 1.5, 
           textAlign: 'center', 
-          color: '#fff',
+          color: '#FFFFFFCC',
           textShadow: '0 0 20px rgba(255,255,255,0.2)'
         }}
       >
@@ -23,17 +23,25 @@ const ShoppingHeader = ({ title, setTitle, count, setCount, onAdd }: ShoppingHea
       <Stack direction="row" spacing={2} alignItems="center">
         <TextField
           placeholder="Title..."
-          fullWidth
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           sx={{
-            background: 'rgba(255,255,255,0.1)',
-            borderRadius: 2,
+            width: '192px',
+            minWidth: '192px',
+            opacity: 1,
             '& .MuiOutlinedInput-root': {
+              height: '35px',
+              borderRadius: '3px',
               color: '#fff',
+              background: 'rgba(255,255,255,0.1)',
               '& fieldset': { borderColor: 'transparent' },
               '&:hover fieldset': { borderColor: 'rgba(255,255,255,0.3)' },
               '&.Mui-focused fieldset': { borderColor: '#fbc02d' },
+            },
+            '& .MuiOutlinedInput-input': {
+              padding: '0 12px',
+              height: '35px',
+              boxSizing: 'border-box',
             },
           }}
         />
@@ -44,31 +52,47 @@ const ShoppingHeader = ({ title, setTitle, count, setCount, onAdd }: ShoppingHea
           value={count}
           onChange={(e) => setCount(e.target.value)}
           sx={{
-            width: '80px',
-            background: 'rgba(255,255,255,0.1)',
-            borderRadius: 2,
+            width: '64px',
+            minWidth: '64px',
+            opacity: 1,
             '& .MuiOutlinedInput-root': {
+              height: '35px',
+              borderRadius: '3px',
               color: '#fff',
+              background: 'rgba(255,255,255,0.1)',
               '& fieldset': { borderColor: 'transparent' },
               '&:hover fieldset': { borderColor: 'rgba(255,255,255,0.3)' },
               '&.Mui-focused fieldset': { borderColor: '#fbc02d' },
+            },
+            '& .MuiOutlinedInput-input': {
+              padding: '0 12px',
+              height: '35px',
+              boxSizing: 'border-box',
             },
           }}
         />
 
         <Button
           onClick={onAdd}
-          variant="outlined"
+          variant="contained"
           sx={{
-            py: 1.8,
-            px: 4,
-            borderColor: '#fbc02d',
-            color: '#fbc02d',
+            width: '67px',
+            height: '35px',
+            minWidth: '67px',
+            borderRadius: '5px',
+            background: '#FFD700',
+            border: '2px solid #FFD700',
+            color: '#1a1a1a',
             fontWeight: 'bold',
-            borderRadius: 3,
+            fontSize: '14px',
+            opacity: 1,
+            textTransform: 'none',
+            boxShadow: 'none',
+            flexShrink: 0,
             '&:hover': {
-              borderColor: '#fff',
-              background: 'rgba(251, 192, 45, 0.1)',
+              background: '#e6c200',
+              border: '2px solid #e6c200',
+              boxShadow: 'none',
             },
           }}
         >
