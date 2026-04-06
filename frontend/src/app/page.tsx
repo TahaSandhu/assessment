@@ -1,68 +1,36 @@
 'use client';
-import { Container, Typography, Box, Button, Stack, Paper } from '@mui/material';
-import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import { increment, decrement } from '@/lib/features/counter/counterSlice';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
+import React from 'react';
+import { Container, Typography, Box, Paper, Button } from '@mui/material';
+import LogoutIcon from '@mui/icons-material/Logout';
+import SigninForm from '@/components/signin';
+import { useAuth } from '@/context/AuthContext';
+import { authPaperStyles } from '@/lib/themeStyles';
+import HomeLayout from '@/components/home';
 
 export default function Home() {
-  const count = useAppSelector((state) => state.counter.value);
-  const dispatch = useAppDispatch();
+  const { isAuthenticated, logout } = useAuth();
 
-  return (
-    <Container maxWidth="lg">
-      <Box
-        sx={{
-          my: 4,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          minHeight: '80vh',
-        }}
-      >
-        <Typography variant="h2" component="h1" gutterBottom align="center" sx={{ fontWeight: 'bold', color: 'primary.main' }}>
-          Next.js + MUI + Redux
-        </Typography>
-        <Typography variant="h5" component="h2" gutterBottom align="center" color="text.secondary">
-          A premium boilerplate for modern web applications
-        </Typography>
-
-        <Paper elevation={3} sx={{ p: 4, mt: 4, borderRadius: 4, textAlign: 'center', minWidth: 300 }}>
-          <Typography variant="h6" gutterBottom>
-            Redux Toolkit Counter
-          </Typography>
-          <Typography variant="h3" sx={{ my: 3, fontWeight: 'medium' }}>
-            {count}
-          </Typography>
-          <Stack direction="row" spacing={2} justifyContent="center">
-            <Button
-              variant="contained"
-              color="secondary"
-              startIcon={<RemoveIcon />}
-              onClick={() => dispatch(decrement())}
-              sx={{ borderRadius: 2 }}
-            >
-              Decrement
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              endIcon={<AddIcon />}
-              onClick={() => dispatch(increment())}
-              sx={{ borderRadius: 2 }}
-            >
-              Increment
-            </Button>
-          </Stack>
-        </Paper>
-
-        <Box sx={{ mt: 8, textAlign: 'center' }}>
-          <Typography variant="body2" color="text.secondary">
-            Built with ❤️ using Next.js 14, Material UI version 6, and Redux Toolkit.
-          </Typography>
-        </Box>
+  // If NOT authenticated, show the Sign In form
+  if (!isAuthenticated) {
+    return (
+      <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', py: 8 }}>
+        <Container maxWidth="sm">
+          <Paper elevation={24} sx={authPaperStyles}>
+            <Box sx={{ mb: 4, textAlign: 'center' }}>
+              <Typography variant="h3" sx={{ fontWeight: 800, mb: 1, letterSpacing: '-0.5px' }}>
+                Sign In
+              </Typography>
+              <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.6)' }}>
+                Please log in to access the dashboard
+              </Typography>
+            </Box>
+            <SigninForm />
+          </Paper>
+        </Container>
       </Box>
-    </Container>
-  );
+    );
+  }
+
+  // If authenticated, show the REAL premium Home layout
+  return <HomeLayout />;
 }

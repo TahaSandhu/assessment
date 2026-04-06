@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
-import "./globals.css";
+import { Box } from "@mui/material";
 import StoreProvider from "@/lib/StoreProvider";
 import ThemeRegistry from "@/components/ThemeRegistry";
+import { AuthProvider } from "@/context/AuthContext";
+import "./globals.css";
 
 const roboto = Roboto({
   weight: ["300", "400", "500", "700"],
@@ -10,11 +11,6 @@ const roboto = Roboto({
   display: "swap",
   variable: "--font-roboto",
 });
-
-export const metadata: Metadata = {
-  title: "Next.js MUI Redux Boilerplate",
-  description: "A professional boilerplate with Next.js, MUI, and Redux Toolkit",
-};
 
 export default function RootLayout({
   children,
@@ -25,7 +21,21 @@ export default function RootLayout({
     <html lang="en">
       <body className={roboto.variable}>
         <StoreProvider>
-          <ThemeRegistry>{children}</ThemeRegistry>
+          <AuthProvider>
+            <ThemeRegistry>
+              <Box
+                sx={{
+                  minHeight: '100vh',
+                  width: '100vw',
+                  background: 'linear-gradient(135deg, #000000 0%, #2c3e50 100%)',
+                  color: '#fff',
+                  overflowX: 'hidden'
+                }}
+              >
+                {children}
+              </Box>
+            </ThemeRegistry>
+          </AuthProvider>
         </StoreProvider>
       </body>
     </html>
