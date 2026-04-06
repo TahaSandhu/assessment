@@ -4,11 +4,18 @@ import userRepository from '../repository/userRepository';
 import emailService from '../utilts/emailService';
 
 class UserService {
-  async signupUser(email: string, password: string) {
+  async signupUser(email: string, password: string, username: string) {
     // 1. Check if user already exists
     const existingUser = await userRepository.findByEmail(email);
     if (existingUser) {
       throw new Error('User already exists with this email');
+    }
+
+    // 1.1 Check if username is taken
+    // Assuming findOne is available in repo or adding it
+    const existingUsername = await userRepository.findByUsername(username);
+    if (existingUsername) {
+      throw new Error('Username is already taken');
     }
 
     // 2. Hash Password
@@ -28,6 +35,7 @@ class UserService {
     // 5. Create user (but isVerified: false)
     const newUser = await userRepository.create({
       email,
+      username,
       password: hashedPassword,
       otp,
       otpExpiresAt,

@@ -10,6 +10,10 @@ class UserRepository {
     return await User.findOne({ email });
   }
 
+  async findByUsername(username: string) {
+    return await User.findOne({ username });
+  }
+
   async updateById(userId: string, updateData: any) {
     return await User.findByIdAndUpdate(userId, updateData, { new: true });
   }

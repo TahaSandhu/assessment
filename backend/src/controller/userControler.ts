@@ -4,17 +4,17 @@ import userService from '../services/userService';
 class UserController {
   async signup(req: Request, res: Response) {
     try {
-      const { email, password } = req.body;
+      const { email, password, username } = req.body;
 
-      if (!email || !password) {
-        return res.status(400).json({ error: 'Email and password are required' });
+      if (!email || !password || !username) {
+        return res.status(400).json({ error: 'Email, password, and username are required' });
       }
 
       if (password.length < 6) {
         return res.status(400).json({ error: 'Password must be at least 6 characters long' });
       }
 
-      const result = await userService.signupUser(email, password);
+      const result = await userService.signupUser(email, password, username);
       return res.status(201).json(result);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Signup failed';
