@@ -1,65 +1,68 @@
-import Image from "next/image";
+'use client';
+import { Container, Typography, Box, Button, Stack, Paper } from '@mui/material';
+import { useAppDispatch, useAppSelector } from '@/lib/hooks';
+import { increment, decrement } from '@/lib/features/counter/counterSlice';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 export default function Home() {
+  const count = useAppSelector((state) => state.counter.value);
+  const dispatch = useAppDispatch();
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <Container maxWidth="lg">
+      <Box
+        sx={{
+          my: 4,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '80vh',
+        }}
+      >
+        <Typography variant="h2" component="h1" gutterBottom align="center" sx={{ fontWeight: 'bold', color: 'primary.main' }}>
+          Next.js + MUI + Redux
+        </Typography>
+        <Typography variant="h5" component="h2" gutterBottom align="center" color="text.secondary">
+          A premium boilerplate for modern web applications
+        </Typography>
+
+        <Paper elevation={3} sx={{ p: 4, mt: 4, borderRadius: 4, textAlign: 'center', minWidth: 300 }}>
+          <Typography variant="h6" gutterBottom>
+            Redux Toolkit Counter
+          </Typography>
+          <Typography variant="h3" sx={{ my: 3, fontWeight: 'medium' }}>
+            {count}
+          </Typography>
+          <Stack direction="row" spacing={2} justifyContent="center">
+            <Button
+              variant="contained"
+              color="secondary"
+              startIcon={<RemoveIcon />}
+              onClick={() => dispatch(decrement())}
+              sx={{ borderRadius: 2 }}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              Decrement
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              endIcon={<AddIcon />}
+              onClick={() => dispatch(increment())}
+              sx={{ borderRadius: 2 }}
             >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+              Increment
+            </Button>
+          </Stack>
+        </Paper>
+
+        <Box sx={{ mt: 8, textAlign: 'center' }}>
+          <Typography variant="body2" color="text.secondary">
+            Built with ❤️ using Next.js 14, Material UI version 6, and Redux Toolkit.
+          </Typography>
+        </Box>
+      </Box>
+    </Container>
   );
 }
