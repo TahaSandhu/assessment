@@ -1,0 +1,45 @@
+openapi: 3.0.0
+info:
+  title: Interview Task API
+  description: API documentation for the full stack project.
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000/api
+    description: Local development server
+
+paths:
+  /health:
+    get:
+      summary: Check server health
+      responses:
+        '200':
+          description: Server is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  timestamp:
+                    type: string
+
+  /info:
+    get:
+      summary: Get application info
+      responses:
+        '200':
+          description: Application info
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  app:
+                    type: string
+                  version:
+                    type: string
+                  framework:
+                    type: string
