@@ -4,42 +4,46 @@ info:
   description: API documentation for the full stack project.
   version: 1.0.0
 servers:
-  - url: http://localhost:5000/api
+  - url: http://localhost:5001/api
     description: Local development server
 
 paths:
-  /health:
-    get:
-      summary: Check server health
+  /auth/signup:
+    post:
+      summary: User signup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
       responses:
-        '200':
-          description: Server is healthy
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                  message:
-                    type: string
-                  timestamp:
-                    type: string
+        '201':
+          description: Signup successful
+        '400':
+          description: Invalid input
 
-  /info:
-    get:
-      summary: Get application info
+  /auth/verify-otp:
+    post:
+      summary: Verify OTP
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                otp:
+                  type: string
       responses:
         '200':
-          description: Application info
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  app:
-                    type: string
-                  version:
-                    type: string
-                  framework:
-                    type: string
+          description: Verification successful
+        '400':
+          description: Invalid OTP or expiry

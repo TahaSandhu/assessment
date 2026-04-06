@@ -6,11 +6,13 @@ dotenv.config();
 
 const port = process.env.PORT || 5000;
 
-connectDB().then(() => {
-  app.listen(port, () => {
-    console.log(`[server]: Server is running at http://localhost:${port}`);
-  });
-}).catch((error) => {
+// Connect to Database
+connectDB().catch((error) => {
   console.error(`[server]: Failed to connect to database: ${error.message}`);
-  process.exit(1);
+});
+
+// Start server
+app.listen(port, () => {
+  console.log(`[server]: Server is running at http://localhost:${port}`);
+  console.log(`[server]: Swagger documentation at http://localhost:${port}/api-docs`);
 });
