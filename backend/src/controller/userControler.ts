@@ -36,3 +36,55 @@ export const verifyOtp = async (req: Request, res: Response) => {
     return res.status(400).json({ error: errorMessage });
   }
 };
+
+export const login = async (req: Request, res: Response) => {
+  try {
+    const { emailOrUsername, password } = req.body;
+
+    if (!emailOrUsername || !password) {
+      return res.status(400).json({ error: 'Email/Username and password are required' });
+    }
+
+    const result = await userService.loginUser(emailOrUsername, password);
+    return res.status(200).json(result);
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Login failed';
+    return res.status(401).json({ error: errorMessage });
+  }
+};
+
+export const forgotPassword = async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ error: 'Email is required' });
+    }
+
+    const result = await userService.forgotPassword(email);
+    return res.status(200).json(result);
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Forgot password request failed';
+    return res.status(400).json({ error: errorMessage });
+  }
+};
+
+export const resetPassword = async (req: Request, res: Response) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+
+    if (!email || !otp || !newPassword) {
+      return res.status(400).json({ error: 'Email, OTP, and new password are required' });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({ error: 'New password must be at least 6 characters long' });
+    }
+
+    const result = await userService.resetPassword(email, otp, newPassword);
+    return res.status(200).json(result);
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Password reset failed';
+    return res.status(400).json({ error: errorMessage });
+  }
+};

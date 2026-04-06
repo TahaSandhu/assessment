@@ -9,13 +9,21 @@ const app = express();
 
 const swaggerDocument = YAML.load(path.join(__dirname, 'swagger.yml'));
 
-app.use(cors());
 app.use(express.json());
 
-// Routes
-app.use('/api/auth', authRoutes);
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
-// Swagger Documentation Route
+app.use('/api/auth', authRoutes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+app.get('/', (req: Request, res: Response) => {
+  res.send('API is running');
+});
 
 export default app;
