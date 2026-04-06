@@ -4,7 +4,7 @@ import { Container, Typography, Box, Paper } from '@mui/material';
 import SignupForm from '@/components/signup';
 import { authPaperStyles } from '@/lib/themeStyles';
 
-export default function SignUpPage() {
+const SignUpPage = () => {
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', py: 8 }}>
       <Container maxWidth="sm">
@@ -23,3 +23,4 @@ export default function SignUpPage() {
     </Box>
   );
 }
+export default SignUpPage;

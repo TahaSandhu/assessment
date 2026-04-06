@@ -1,6 +1,7 @@
 'use client';
 import Home from '@/components/home';
 
-export default function MainPage() {
+const MainPage = () => {
   return <Home />;
-}
+};
+export default MainPage;

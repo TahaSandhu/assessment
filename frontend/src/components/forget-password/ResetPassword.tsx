@@ -6,49 +6,56 @@ import {
   Button,
   InputAdornment,
   IconButton,
-  Typography,
   Alert,
 } from "@mui/material";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import Link from "next/link";
-import PersonIcon from "@mui/icons-material/Person";
 import LockIcon from "@mui/icons-material/Lock";
+import VpnKeyIcon from "@mui/icons-material/VpnKey";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { darkTextFieldStyles } from "@/lib/themeStyles";
-import { signinSchema } from "./schema";
-import { loginApi } from "@/services/api";
-import { useAuth } from "@/context/AuthContext";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { resetPasswordApi } from "@/services/api";
 import { useRouter } from "next/navigation";
 
-export default function SigninForm() {
+interface Props {
+  email: string;
+}
+
+const resetPasswordSchema = yup.object().shape({
+  otp: yup
+    .string()
+    .required("OTP is required")
+    .length(6, "OTP must be 6 digits"),
+  newPassword: yup
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .required("Password is required"),
+});
+
+const ResetPasswordForm = ({ email }: Props) => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { login } = useAuth();
   const router = useRouter();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm({
-    resolver: yupResolver(signinSchema),
+  const form = useForm({
+    resolver: yupResolver(resetPasswordSchema),
   });
 
   const onSubmit = async (data: any) => {
     setError(null);
     try {
-      const response = await loginApi(data);
-      const { token } = response.data;
-
-      login(token);
-      alert("Sign in successful!");
-      router.push("/");
+      await resetPasswordApi({
+        email,
+        otp: data.otp,
+        newPassword: data.newPassword,
+      });
+      alert("Password reset successfully! Please log in.");
+      router.push("/signin");
     } catch (err: any) {
       setError(
         err.response?.data?.error ||
-          "Login failed. Please check your credentials.",
+          "Email, OTP, and new password are required",
       );
     }
   };
@@ -61,31 +68,31 @@ export default function SigninForm() {
         </Alert>
       )}
 
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
           <TextField
             fullWidth
-            label="Email or Username"
-            {...register("emailOrUsername")}
-            error={!!errors.emailOrUsername}
-            helperText={errors.emailOrUsername?.message as string}
+            label="OTP"
+            {...form.register("otp")}
+            error={!!form.formState.errors.otp}
+            helperText={form.formState.errors.otp?.message as string}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <PersonIcon sx={{ color: "rgba(255,255,255,0.5)" }} />
+                  <VpnKeyIcon sx={{ color: "rgba(255,255,255,0.5)" }} />
                 </InputAdornment>
               ),
             }}
-            sx={darkTextFieldStyles}
+            sx={{ input: { color: "#fff" }, fieldset: { borderColor: "#555" } }}
           />
 
           <TextField
             fullWidth
-            label="Password"
+            label="New Password"
             type={showPassword ? "text" : "password"}
-            {...register("password")}
-            error={!!errors.password}
-            helperText={errors.password?.message as string}
+            {...form.register("newPassword")}
+            error={!!form.formState.errors.newPassword}
+            helperText={form.formState.errors.newPassword?.message as string}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -104,44 +111,28 @@ export default function SigninForm() {
                 </InputAdornment>
               ),
             }}
-            sx={darkTextFieldStyles}
+            sx={{ input: { color: "#fff" }, fieldset: { borderColor: "#555" } }}
           />
-          <Box sx={{ display: "flex", justifyContent: "flex-end", color: "#4b6cb7" }}>
-            <Link href="/forget-password" style={{ color: "#4b6cb7",borderBottom:"1px solid #4b6cb7",fontSize:"12px" }}>Forget Password</Link>
-          </Box>
+
           <Button
             fullWidth
             type="submit"
             variant="contained"
-            disabled={isSubmitting}
+            disabled={form.formState.isSubmitting}
             sx={{
-              mt: 2,
+              mt: 1,
               py: 1.5,
               borderRadius: 3,
               fontWeight: "bold",
               background: "linear-gradient(45deg, #4b6cb7 0%, #182848 100%)",
             }}
           >
-            {isSubmitting ? "Signing In..." : "Sign In"}
+            {form.formState.isSubmitting ? "Resetting..." : "Reset Password"}
           </Button>
         </Box>
       </form>
-
-      <Box sx={{ mt: 4, textAlign: "center" }}>
-        <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.5)" }}>
-          Don't have an account?{" "}
-          <Link
-            href="/signup"
-            style={{
-              color: "#4b6cb7",
-              textDecoration: "none",
-              fontWeight: "bold",
-            }}
-          >
-            Sign Up
-          </Link>
-        </Typography>
-      </Box>
     </Box>
   );
-}
+};
+
+export default ResetPasswordForm;

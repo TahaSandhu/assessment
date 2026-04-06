@@ -1,7 +1,5 @@
 'use client';
-import React from 'react';
-import { Container, Typography, Box, Paper, Button } from '@mui/material';
-import LogoutIcon from '@mui/icons-material/Logout';
+import { Container, Typography, Box, Paper } from '@mui/material';
 import SigninForm from '@/components/signin';
 import { useAuth } from '@/context/AuthContext';
 import { authPaperStyles } from '@/lib/themeStyles';
@@ -9,8 +7,6 @@ import HomeLayout from '@/components/home';
 
 export default function Home() {
   const { isAuthenticated, logout } = useAuth();
-
-  // If NOT authenticated, show the Sign In form
   if (!isAuthenticated) {
     return (
       <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', py: 8 }}>
@@ -30,7 +26,5 @@ export default function Home() {
       </Box>
     );
   }
-
-  // If authenticated, show the REAL premium Home layout
   return <HomeLayout />;
 }

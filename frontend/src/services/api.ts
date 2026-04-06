@@ -24,6 +24,8 @@ const api = axios.create({
 export const signupApi = (data: any) => api.post("/signup", data);
 export const verifyOtpApi = (data: any) => api.post("/verify-otp", data);
 export const loginApi = (data: any) => api.post("/login", data);
+export const forgotPasswordApi = (data: any) => api.post("/forgot-password", data);
+export const resetPasswordApi = (data: any) => api.post("/reset-password", data);
 
 const dummyApi = axios.create({
   baseURL: "https://dummyjson.com",
